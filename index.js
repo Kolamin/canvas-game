@@ -4,6 +4,8 @@ const c = canvas.getContext("2d");
 canvas.width = innerWidth;
 canvas.height = innerHeight;
 
+const scoreEl = document.querySelector("#scoreEl");
+
 class Player {
   constructor(x, y, radius, color) {
     this.x = x;
@@ -134,7 +136,7 @@ function spawnEnemies() {
 }
 
 let animationId;
-
+let score = 0;
 function animate() {
   animationId = requestAnimationFrame(animate);
   c.fillStyle = "rgba(0, 0, 0, 0.1)";
@@ -195,6 +197,9 @@ function animate() {
         }
 
         if (enemy.radius - 10 > 5) {
+          // increase our score
+          score += 100;
+          scoreEl.innerHTML = score;
           gsap.to(enemy, {
             radius: enemy.radius - 10,
           });
@@ -202,6 +207,9 @@ function animate() {
             projectiles.splice(projectileIndex, 1);
           }, 0);
         } else {
+          // remove from scene altogether
+          score += 250;
+          scoreEl.innerHTML = score;
           setTimeout(() => {
             enemies.splice(index, 1);
             projectiles.splice(projectileIndex, 1);
@@ -213,7 +221,6 @@ function animate() {
 }
 
 addEventListener("click", (event) => {
-  console.log(projectiles);
   const angle = Math.atan2(
     event.clientY - canvas.height / 2,
     event.clientX - canvas.width / 2
